@@ -1,0 +1,14 @@
+services:
+  bilhete24:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5003:5003"
+    networks:
+      - bilhete24
+
+networks:
+  bilhete24:
+    driver: bridge
+      

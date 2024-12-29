@@ -1,0 +1,6 @@
+@bilhete24_HostAddress = http://localhost:5003
+
+GET {{bilhete24_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
