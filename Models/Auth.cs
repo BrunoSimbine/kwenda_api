@@ -17,7 +17,7 @@ public class Auth : BaseEntity
     {
         get
         {
-            return DateDeleted.HasValue && DateDeleted.Value > DateTime.Now;
+            return DateDeleted.HasValue && DateDeleted.Value <= DateTime.Now;
         }
     }
 }

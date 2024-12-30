@@ -34,6 +34,12 @@ public class AuthController : ControllerBase
         return Ok(await _userService.GetLogin(authDto));
     }
 
+    [HttpPost("login/oauth")]
+    public async Task<ActionResult<User>> OAuth2(OAuthDto oauthDto)
+    {
+        return Ok(await _userService.GetOauth(oauthDto));
+    }
+
     [HttpPost("otp")]
     public ActionResult<User> Otp(OtpDto otpDto)
     {

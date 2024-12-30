@@ -8,13 +8,14 @@ public class User : BaseEntity
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Role { get; set; } = "user";
-    public string Phone { get; set; }
+    public string? Phone { get; set; }
+    public string? Email { get; set; }
     public bool IsVerified { get; set; } = false;
     public bool IsDeleted
     {
         get
         {
-            return DateDeleted.HasValue && DateDeleted.Value > DateTime.Now;
+            return DateDeleted.HasValue && DateDeleted.Value <= DateTime.Now;
         }
     }
 

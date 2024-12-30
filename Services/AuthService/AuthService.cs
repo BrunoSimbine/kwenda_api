@@ -30,7 +30,7 @@ public class AuthService : IAuthService
     public async Task<List<Auth>> GetByUser()
     {
         var userId = _userRepository.GetId();
-        var auth = await _authRepository.GetByUserId(userId);
+        var auth = await _authRepository.GetActives(userId);
         return auth;
     }
 

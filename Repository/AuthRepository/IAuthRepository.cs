@@ -6,7 +6,8 @@ namespace bilhete24.Repository.AuthRepository;
 public interface IAuthRepository : IBaseRepository<Auth>
 {
 	Task<Auth> Get(Guid id);
-	Task<List<Auth>> GetByUserId(Guid userId);
+	Task<List<Auth>> GetActives(Guid userId);
+	Task<bool> IsDeleted();
 	Task<List<Auth>> GetAll();
 	Task<Auth> GetByToken(string token);
 	string GetCurrentToken();

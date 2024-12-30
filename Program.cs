@@ -6,6 +6,7 @@ using System.Text;
 using Swashbuckle.AspNetCore.Filters;
 
 using bilhete24.Data;
+using bilhete24.Filters;
 using bilhete24.Repository.UserRepository;
 using bilhete24.Repository.AuthRepository;
 
@@ -63,6 +64,10 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.AddScoped<RequireActiveUserFilter>();
+builder.Services.AddScoped<RequireActiveAuthFilter>();
+builder.Services.AddScoped<RequireVerifiedUserFilter>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

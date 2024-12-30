@@ -49,6 +49,48 @@ public class UserService : IUserService
         }
     }
 
+    public async Task<User> CreateByOAuth(UserOAuthDto userOAuthDto)
+    {
+        if(!await _userRepository.ExistsAnyEmail(userOAuthDto.Email))
+        {
+            _authRepository.CreatePasswordHash(userOAuthDto.OAuthToken, out byte[] passwordHash, out byte[] passwordSalt);
+
+            var user = await _userRepository.Create(new User
+            {
+                FirstName = userOAuthDto.FirstName,
+                LastName = userOAuthDto.LastName,
+                Email = userOAuthDto.Email,
+                PasswordHash = passwordHash,
+                PasswordSalt =  passwordSalt
+            });
+
+            return user;
+        } else {
+            throw new PhoneAlreadyExistsException("Email are already used!");
+            return new User();
+        }
+    }
+
+    public async Task<Auth> GetOauth(OAuthDto oauthDto)
+    {
+        if (await _userRepository.ExistsAnyEmail(oauthDto.Email))
+        {
+            var user = await _userRepository.GetByEmail(oauthDto.Email);
+            var token = _authRepository.CreateToken(user);
+
+            var auth = await _authRepository.Create(new Auth
+            {
+                User = user,
+                Device = oauthDto.Device,
+                Token = token
+            });
+
+            return auth;
+        } else {
+            return new Auth();
+        }
+    }
+
     public async Task<Auth> GetLogin(AuthDto authDto)
     {
         if (await _userRepository.ExistsAny(authDto.Phone))
@@ -67,5 +109,54 @@ public class UserService : IUserService
         } else {
             return new Auth();
         }
+    }
+
+    public async Task<List<User>> GetAll()
+    {
+        return await _userRepository.GetAll();
+    }
+
+    public async Task<User> Get()
+    {
+        return await _userRepository.Get();
+    }
+
+    public async Task<User> UpgradeRole()
+    {
+        var user = await _userRepository.Get();
+        return await _userRepository.UpgradeRole(user);
+    }
+
+    public async Task<User> Verify()
+    {
+        var user = await _userRepository.Get();
+        return await _userRepository.Verify(user);
+    }
+
+
+    public async Task<User> Recover()
+    {
+        var user = await _userRepository.Get();
+        return await _userRepository.Recover(user);
+    }
+
+    public async Task<List<User>> GetActives()
+    {
+        return await _userRepository.GetActives();
+    }
+
+
+
+
+    public async Task<User> Delete()
+    {
+        var user = await _userRepository.Get();
+        return await _userRepository.Delete(user);
+    }
+
+    public async Task<User> Delete(Guid id)
+    {
+        var user = await _userRepository.Get(id);
+        return await _userRepository.Delete(user);
     }
 }

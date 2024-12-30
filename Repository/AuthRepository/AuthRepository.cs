@@ -62,9 +62,8 @@ public class AuthRepository : IAuthRepository
         return auth;
     }
 
-    public async Task<List<Auth>> GetByUserId(Guid userId)
+    public async Task<List<Auth>> GetActives(Guid userId)
     {
-        var now = DateTime.Now;
         var auth = await _context.Auth.Where(a => a.UserId == userId && a.DateDeleted == null).ToListAsync();
         return auth;
     }
@@ -74,6 +73,19 @@ public class AuthRepository : IAuthRepository
         var auth = await _context.Auth.ToListAsync();
         return auth;
     }
+
+    public async Task<bool> IsDeleted()
+    {
+        var token = GetCurrentToken();
+        var auth = await GetByToken(token);
+        if(auth.IsDeleted == true)
+        {
+            return true; 
+        } else {
+            return false;
+        }
+    }
+
 
     public string GetCurrentToken()
     {
