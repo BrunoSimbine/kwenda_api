@@ -10,7 +10,7 @@ public class Auth : BaseEntity
     public Guid UserId { get; set; }
 
     public string Device { get; set; }
-    public string IpAddress { get; set; } = "127.0.0.1";
+    public string IpAddress { get; set; }
     public string Token { get; set; }
     public DateTime LastActivity { get; set; } = DateTime.Now;
     public bool IsDeleted

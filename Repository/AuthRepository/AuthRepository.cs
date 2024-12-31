@@ -93,6 +93,22 @@ public class AuthRepository : IAuthRepository
         return headers["Authorization"].ToString().Substring("Bearer ".Length).Trim();
     }
 
+    public string GetCurrentDevice()
+    {
+        var headers = _accessor.HttpContext?.Request.Headers;
+        return (headers != null) ? headers["User-Agent"].ToString() : "Nothing";
+    }
+
+    public string GetIpAddress()
+    {
+
+        var forwardedForHeader = _accessor.HttpContext?.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+        var clientIp = forwardedForHeader ?? _accessor.HttpContext?.Connection.RemoteIpAddress?.ToString();
+        return clientIp;
+    }
+
+
+
     public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
     {
         using var hmac = new HMACSHA256();

@@ -39,10 +39,12 @@ public class AuthService : IAuthService
         bool userExists = await _userRepository.ExistsAny(authDto.Phone);
         if (userExists) {
             var user = await _userRepository.GetByPhone(authDto.Phone);
+            var device = _authRepository.GetCurrentDevice();
             var auth = new Auth();
             if (_authRepository.VerifyPasswordHash(authDto.Password, user.PasswordHash, user.PasswordSalt)){
                 var token = _authRepository.CreateToken(user);
-                auth.Device = authDto.Device;
+                auth.IpAddress = _authRepository.GetIpAddress();
+                auth.Device = device;
                 auth.Token = token;
                 auth.UserId = user.Id;
                 await _authRepository.Create(auth);
@@ -63,11 +65,12 @@ public class AuthService : IAuthService
         bool userExists = await _userRepository.ExistsAnyEmail(authDto.Email);
         if (userExists) {
             var user = await _userRepository.GetByEmail(authDto.Email);
+            var device = _authRepository.GetCurrentDevice();
             var auth = new Auth();
             if (_authRepository.VerifyPasswordHash(authDto.OAuthToken, user.PasswordHash, user.PasswordSalt))
             {
                 var token = _authRepository.CreateToken(user);
-                auth.Device = authDto.Device;
+                auth.Device = device;
                 auth.Token = token;
                 auth.UserId = user.Id;
                 await _authRepository.Create(auth);
