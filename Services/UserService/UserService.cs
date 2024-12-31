@@ -44,7 +44,7 @@ public class UserService : IUserService
 
             return user;
         } else {
-            throw new PhoneAlreadyExistsException("Contact are already used!");
+            throw new UserAlreadyExistsException("Contact are already used!");
             return new User();
         }
     }
@@ -66,48 +66,8 @@ public class UserService : IUserService
 
             return user;
         } else {
-            throw new PhoneAlreadyExistsException("Email are already used!");
+            throw new UserAlreadyExistsException("Email are already used!");
             return new User();
-        }
-    }
-
-    public async Task<Auth> GetOauth(OAuthDto oauthDto)
-    {
-        if (await _userRepository.ExistsAnyEmail(oauthDto.Email))
-        {
-            var user = await _userRepository.GetByEmail(oauthDto.Email);
-            var token = _authRepository.CreateToken(user);
-
-            var auth = await _authRepository.Create(new Auth
-            {
-                User = user,
-                Device = oauthDto.Device,
-                Token = token
-            });
-
-            return auth;
-        } else {
-            return new Auth();
-        }
-    }
-
-    public async Task<Auth> GetLogin(AuthDto authDto)
-    {
-        if (await _userRepository.ExistsAny(authDto.Phone))
-        {
-            var user = await _userRepository.GetByPhone(authDto.Phone);
-            var token = _authRepository.CreateToken(user);
-
-            var auth = await _authRepository.Create(new Auth
-            {
-                User = user,
-                Device = authDto.Device,
-                Token = token
-            });
-
-            return auth;
-        } else {
-            return new Auth();
         }
     }
 

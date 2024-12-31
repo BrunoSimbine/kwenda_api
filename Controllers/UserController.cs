@@ -57,11 +57,11 @@ public class UserController : ControllerBase
             var user = await _userService.Create(userDto);
             return Ok(user);
 
-        } catch (PhoneAlreadyExistsException ex){
+        } catch (UserAlreadyExistsException ex){
             return Conflict(new {
-                type = "error",
-                code = 409,
-                message = "This contact are already used!"
+                type = "conflict",
+                error = "Your contact are not available!",
+                solution = "Try a diferent contact to proceed."
             });
         } 
     }
@@ -73,11 +73,11 @@ public class UserController : ControllerBase
             var user = await _userService.CreateByOAuth(userOAuthDto);
             return Ok(user);
 
-        } catch (PhoneAlreadyExistsException ex){
+        } catch (UserAlreadyExistsException ex){
             return Conflict(new {
-                type = "error",
-                code = 409,
-                message = "This contact are already used!"
+                type = "conflict",
+                error = "Your email are not available!",
+                solution = "Try a diferent email to proceed."
             });
         } 
     }
