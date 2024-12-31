@@ -103,7 +103,7 @@ public class AuthRepository : IAuthRepository
     {
 
         var forwardedForHeader = _accessor.HttpContext?.Request.Headers["X-Forwarded-For"].FirstOrDefault();
-        var clientIp = forwardedForHeader ?? _accessor.HttpContext?.Connection.RemoteIpAddress?.ToString();
+        var clientIp = forwardedForHeader ?? _accessor.HttpContext?.Connection.RemoteIpAddress?.MapToIPv4().ToString();
         return clientIp;
     }
 

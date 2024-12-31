@@ -71,6 +71,7 @@ public class AuthService : IAuthService
             {
                 var token = _authRepository.CreateToken(user);
                 auth.Device = device;
+                auth.IpAddress = _authRepository.GetIpAddress();
                 auth.Token = token;
                 auth.UserId = user.Id;
                 await _authRepository.Create(auth);
